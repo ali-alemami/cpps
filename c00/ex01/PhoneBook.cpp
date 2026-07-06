@@ -24,10 +24,8 @@ bool	PhoneBook::_isNumber(const std::string str)
 }
 
 PhoneBook::PhoneBook()
-{
-	_count = 0;
-	_index = 0;
-}
+	: _count(0), _index(0)
+{}
 
 PhoneBook::PhoneBook(const PhoneBook& other)
 {

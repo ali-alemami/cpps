@@ -1,13 +1,8 @@
 #include "Contact.hpp"
 
 Contact::Contact()
-{
-	this->_firstName = "";
-	this->_lastName = "";
-	this->_nickName = "";
-	this->_phoneNumber = "";
-	this->_darkestSecret = "";
-}
+	: _firstName(""), _lastName(""), _nickName(""), _phoneNumber(""), _darkestSecret("")
+{}
 
 Contact::Contact(const Contact& other)
 {
