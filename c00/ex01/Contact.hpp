@@ -18,19 +18,19 @@ class Contact
 		Contact& operator=(const Contact& other);
 		~Contact();
 
-		void		setFirstName(std::string firstName);
-		std::string	getFristName();
+		void		setFirstName(const std::string& firstName);
+		std::string	getFirstName();
 
-		void		setLastName(std::string lastName);
+		void		setLastName(const std::string& lastName);
 		std::string	getLastName();
 
-		void		setNickName(std::string lastName);
+		void		setNickName(const std::string& nickName);
 		std::string	getNickName();
 
-		void		setPhoneNumber(std::string phoneNumber);
+		void		setPhoneNumber(const std::string& phoneNumber);
 		std::string	getPhoneNumber();
 
-		void		setDarkestSecret(std::string darkestSecret);
+		void		setDarkestSecret(const std::string& darkestSecret);
 		std::string getDarkestSecret();
 };
 

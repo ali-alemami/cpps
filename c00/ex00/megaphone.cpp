@@ -4,20 +4,21 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc == 1)
-	{
-		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
-		return (1);
-	}
 	std::string	str = "";
 	size_t		i = 1;
 
+	if (argc == 1)
+	{
+		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
+		return (0);
+	}
 	while (argv[i])
 	{
 		str += argv[i];
 		i++;
 	}
-	for (i = 0; i < str.length(); i++)
+	for (i = 0; i < str.size(); i++)
 		std::cout << static_cast<char>(std::toupper(static_cast<unsigned char>(str[i])));
 	std::cout << std::endl;
+	return (0);
 }
