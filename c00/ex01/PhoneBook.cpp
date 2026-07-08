@@ -7,6 +7,8 @@ void	PhoneBook::_askAndSet(Contact& contact, void (Contact::*setter)(const std::
 	{
 		std::cout << prompt;
 		std::getline(std::cin, input);
+		if (std::cin.eof())
+			std::exit(0);
 	} while (input.empty());
 	(contact.*setter)(input);
 }

@@ -45,6 +45,7 @@ int	main(int argc, char **argv)
 		std::cout << std::endl;
 		//fallthrough
 	default:
+		std::cout << "[ Probably complaining about insignificant problems ]" << std::endl;
 		break;
 	}
 }
