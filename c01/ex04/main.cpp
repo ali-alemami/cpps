@@ -13,7 +13,7 @@ int	main(int argc, char** argv)
 	std::ofstream	newFile;
 
 	if (argc != 4)
-		return (0);
+		return (1);
 	fileName = argv[1];
 	newFileName = fileName + ".replace";
 	oldStr = argv[2];
@@ -47,6 +47,7 @@ int	main(int argc, char** argv)
 				newFile << content[i];
 			}
 		}
+		newFile.close();
 	}
 	else
 	{

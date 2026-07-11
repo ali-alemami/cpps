@@ -39,6 +39,8 @@ PhoneBook::PhoneBook(const PhoneBook& other)
 
 PhoneBook& PhoneBook::operator=(const PhoneBook& other)
 {
+	if (this == &other)
+		return (*this);
 	for (int i = 0; i <= 7; i++)
 		this->_contacts[i] = other._contacts[i];
 	this->_count = other._count;

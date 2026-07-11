@@ -30,12 +30,12 @@ Zombie::~Zombie()
 	std::cout << _name << " destroyed" << std::endl;
 }
 
-void	Zombie::setName(std::string name)
+void	Zombie::setName(const std::string& name)
 {
 	this->_name = name;
 }
 
-std::string	Zombie::getName()
+std::string	Zombie::getName() const
 {
 	return (this->_name);
 }

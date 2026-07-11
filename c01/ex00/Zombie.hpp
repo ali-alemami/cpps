@@ -15,8 +15,8 @@ class Zombie
 		Zombie& operator=(const Zombie& other);
 		~Zombie();
 
-		void		setName(std::string name);
-		std::string	getName();
+		void		setName(const std::string& name);
+		std::string	getName() const;
 		void		announce();
 };
 
