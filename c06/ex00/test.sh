@@ -13,42 +13,42 @@ CROSS="[FAIL]"
 
 # Build
 if [ -f Makefile ]; then
-	make -s
+    make -s
 else
-	c++ -Wall -Wextra -Werror -std=c++98 *.cpp -o convert
+    c++ -Wall -Wextra -Werror -std=c++98 *.cpp -o convert
 fi
 
 if [ ! -x "$BINARY" ]; then
-	echo "Build failed or $BINARY not found."
-	exit 1
+    echo "Build failed or $BINARY not found."
+    exit 1
 fi
 
 check_case() {
-	local input="$1"
-	local expected_char="$2" expected_int="$3" expected_float="$4" expected_double="$5"
-	local out a_char a_int a_float a_double ok
+    local input="$1"
+    local expected_char="$2" expected_int="$3" expected_float="$4" expected_double="$5"
+    local out a_char a_int a_float a_double ok
 
-	out=$("$BINARY" "$input" 2>/dev/null)
-	a_char=$(echo "$out" | grep '^char:' | sed 's/char: //')
-	a_int=$(echo "$out" | grep '^int:' | sed 's/int: //')
-	a_float=$(echo "$out" | grep '^float:' | sed 's/float: //')
-	a_double=$(echo "$out" | grep '^double:' | sed 's/double: //')
+    out=$("$BINARY" "$input" 2>/dev/null)
+    a_char=$(echo "$out" | grep '^char:' | sed 's/char: //')
+    a_int=$(echo "$out" | grep '^int:' | sed 's/int: //')
+    a_float=$(echo "$out" | grep '^float:' | sed 's/float: //')
+    a_double=$(echo "$out" | grep '^double:' | sed 's/double: //')
 
-	ok=1
-	[ "$a_char" == "$expected_char" ] || ok=0
-	[ "$a_int" == "$expected_int" ] || ok=0
-	[ "$a_float" == "$expected_float" ] || ok=0
-	[ "$a_double" == "$expected_double" ] || ok=0
+    ok=1
+    [ "$a_char" == "$expected_char" ] || ok=0
+    [ "$a_int" == "$expected_int" ] || ok=0
+    [ "$a_float" == "$expected_float" ] || ok=0
+    [ "$a_double" == "$expected_double" ] || ok=0
 
-	if [ "$ok" -eq 1 ]; then
-		PASS=$((PASS+1))
-		printf "${GREEN}${CHECK}${NC} %s\n" "\"$input\""
-	else
-		FAIL=$((FAIL+1))
-		printf "${RED}${CROSS}${NC} %s\n" "\"$input\""
-		printf "    expected -> char:%s int:%s float:%s double:%s\n" "$expected_char" "$expected_int" "$expected_float" "$expected_double"
-		printf "    actual   -> char:%s int:%s float:%s double:%s\n" "$a_char" "$a_int" "$a_float" "$a_double"
-	fi
+    if [ "$ok" -eq 1 ]; then
+        PASS=$((PASS+1))
+        printf "${GREEN}${CHECK}${NC} %s\n" "\"$input\""
+    else
+        FAIL=$((FAIL+1))
+        printf "${RED}${CROSS}${NC} %s\n" "\"$input\""
+        printf "    expected -> char:%s int:%s float:%s double:%s\n" "$expected_char" "$expected_int" "$expected_float" "$expected_double"
+        printf "    actual   -> char:%s int:%s float:%s double:%s\n" "$a_char" "$a_int" "$a_float" "$a_double"
+    fi
 }
 
 IMP="impossible"
@@ -136,8 +136,8 @@ check_case "nan" "$IMP" "$IMP" "nanf" "nan"
 check_case "+nan" "$IMP" "$IMP" "$IMP" "$IMP"
 check_case "-nan" "$IMP" "$IMP" "$IMP" "$IMP"
 check_case "inf" "$IMP" "$IMP" "$IMP" "$IMP"
-check_case "+inf" "$IMP" "$IMP" "$IMP" "inf"
-check_case "-inf" "$IMP" "$IMP" "$IMP" "-inf"
+check_case "+inf" "$IMP" "$IMP" "inff" "inf"
+check_case "-inf" "$IMP" "$IMP" "-inff" "-inf"
 check_case "1e308" "$IMP" "$IMP" "$IMP" "$IMP"
 check_case "1e309" "$IMP" "$IMP" "$IMP" "$IMP"
 check_case "1e-320" "$IMP" "$IMP" "$IMP" "$IMP"
@@ -180,6 +180,20 @@ check_case "340282346638528859811704183484516925440.0f" "$IMP" "$IMP" "340282346
 check_case "-340282346638528859811704183484516925440.0f" "$IMP" "$IMP" "-340282346638528859811704183484516925440.0f" "-340282346638528859811704183484516925440.0"
 check_case "0.000000000000000000000000000000000000011754944f" "$ND" "0" "0.0f" "0.0"
 
+# --- Float Rounding Boundaries (Double > FLT_MAX but rounds down to FLT_MAX) ---
+check_case "340282347638528874859170403361205780480.0" "$IMP" "$IMP" "340282346638528859811704183484516925440.0f" "340282347638528874859170403361205780480.0"
+check_case "-340282347638528874859170403361205780480.0" "$IMP" "$IMP" "-340282346638528859811704183484516925440.0f" "-340282347638528874859170403361205780480.0"
+check_case "340282347638528874859170403361205780480.0f" "$IMP" "$IMP" "340282346638528859811704183484516925440.0f" "340282346638528859811704183484516925440.0"
+check_case "-340282347638528874859170403361205780480.0f" "$IMP" "$IMP" "-340282346638528859811704183484516925440.0f" "-340282346638528859811704183484516925440.0"
+# --- Float->Int boundary precision (exact INT_MIN case) ---
+# static_cast<float>(INT_MIN) rounds to -2147483648.0f exactly.
+# A naive `- 1.0f` buffer computed in float rounds right back to the same
+# value (float spacing near 2^31 is 256), so INT_MIN itself must still be
+# accepted as a valid int, not reported impossible.
+check_case "-2147483648.0f" "$IMP" "-2147483648" "-2147483648.0f" "-2147483648.0"
+check_case "-2147483647.0f" "$IMP" "-2147483648" "-2147483648.0f" "-2147483648.0"
+check_case "-2147483649.0f" "$IMP" "-2147483648" "-2147483648.0f" "-2147483648.0"
+
 # --- garbage ---
 check_case "-" "'-'" "45" "45.0f" "45.0"
 check_case "+" "'+'" "43" "43.0f" "43.0"
@@ -195,10 +209,16 @@ check_case "null" "$IMP" "$IMP" "$IMP" "$IMP"
 check_case $'42\n' "$IMP" "$IMP" "$IMP" "$IMP"
 check_case $'\t42' "$IMP" "$IMP" "$IMP" "$IMP"
 
+# --- Decimal Truncation Boundaries ---
+check_case "127.9" "$ND" "127" "127.9000015f" "127.90000000000000568"
+check_case "-128.9" "$ND" "-128" "-128.8999939f" "-128.90000000000000568"
+check_case "127.9f" "$ND" "127" "127.9000015f" "127.90000152587890625"
+check_case "-128.9f" "$ND" "-128" "-128.8999939f" "-128.899993896484375"
+
 echo ""
 echo "==================="
 if [ "$FAIL" -eq 0 ]; then
-	printf "${GREEN}PASS: %d  FAIL: %d${NC}\n" "$PASS" "$FAIL"
+    printf "${GREEN}PASS: %d  FAIL: %d${NC}\n" "$PASS" "$FAIL"
 else
-	printf "${RED}PASS: %d  FAIL: %d${NC}\n" "$PASS" "$FAIL"
+    printf "${RED}PASS: %d  FAIL: %d${NC}\n" "$PASS" "$FAIL"
 fi

@@ -8,6 +8,7 @@
 #include <limits>
 #include <sstream>
 #include <iomanip>
+#include <cctype>
 
 enum eTypes {CHAR, INT, FLOAT, DOUBLE};
 
@@ -133,6 +134,7 @@ static void	strToChar(const std::string& str)
 	int			i;
 	float		f;
 	double		d;
+
 	if (str.size() != 1)
 	{
 		print(0, 0, 0.0f, 0.0, 15, 0);
@@ -189,16 +191,18 @@ static void		strToFloat(const std::string& str)
 	int		nonDisplayable = 0;
 	double	temp;
 
-	temp = std::strtod(str.c_str(), NULL); // the thing is that temp could be +inff and it will be more than 
-	if ((temp > std::numeric_limits<float>::max()
-	|| temp < -std::numeric_limits<float>::max())
+	temp = std::strtod(str.c_str(), NULL);
+	f = static_cast<float>(temp);
+	if ((f == std::numeric_limits<float>::infinity() || f == -std::numeric_limits<float>::infinity())
 	&& (str != "-inff" && str != "+inff" && str != "nanf"))
 	{
 		print(0, 0, 0.0f, 0.0, 15, 0);
 		return ;
 	}
 	f = static_cast<float>(temp);
-	if (f < CHAR_MIN || f > CHAR_MAX || str == "-inff" || str == "+inff" || str == "nanf")
+	if (static_cast<double>(f) <= static_cast<double>(CHAR_MIN) - 1.0
+	|| static_cast<double>(f) >= static_cast<double>(CHAR_MAX) + 1.0
+	|| str == "-inff" || str == "+inff" || str == "nanf")
 	{
 		impossible = 1;
 		c = 0;
@@ -209,7 +213,9 @@ static void		strToFloat(const std::string& str)
 		if (!std::isprint(static_cast<unsigned char>(c)))
 			nonDisplayable = 1;
 	}
-	if (f < INT_MIN || f > INT_MAX || str == "-inff" || str == "+inff" || str == "nanf")
+	if (static_cast<double>(f) <= static_cast<double>(INT_MIN) - 1.0
+	|| static_cast<double>(f) >= static_cast<double>(INT_MAX) + 1.0
+	|| str == "-inff" || str == "+inff" || str == "nanf")
 	{
 		impossible += 2;
 		i = 0;
@@ -236,7 +242,9 @@ static void	strToDouble(const std::string& str)
 		print(0, 0, 0.0f, 0.0, 15, 0);
 		return ;
 	}
-	if (d < CHAR_MIN || d > CHAR_MAX || str == "-inf" || str == "+inf" || str == "nan")
+	if (d <= static_cast<double>(CHAR_MIN) - 1.0
+	|| d >= static_cast<double>(CHAR_MAX) + 1.0
+	|| str == "-inf" || str == "+inf" || str == "nan")
 	{
 		impossible = 1;
 		c = 0;
@@ -247,14 +255,18 @@ static void	strToDouble(const std::string& str)
 		if (!std::isprint(static_cast<unsigned char>(c)))
 			nonDisplayable = 1;
 	}
-	if (d < INT_MIN || d > INT_MAX || str == "-inf" || str == "+inf" || str == "nan")
+	if (d <= static_cast<double>(INT_MIN) - 1.0
+	|| d >= static_cast<double>(INT_MAX) + 1.0
+	|| str == "-inf" || str == "+inf" || str == "nan")
 	{
 		impossible += 2;
 		i = 0;
 	}
 	else
 		i = static_cast<int>(d);
-	if (d > std::numeric_limits<float>::max() || d < -std::numeric_limits<float>::max())
+	f = static_cast<float>(d);
+	if ((f == std::numeric_limits<float>::infinity() || f == -std::numeric_limits<float>::infinity())
+	&& (str != "inf" && str != "+inf" && str != "-inf"))
 	{
 		impossible += 4;
 		f = 0.0f;
