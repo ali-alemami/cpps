@@ -187,14 +187,17 @@ static void		strToFloat(const std::string& str)
 	double	d;
 	int		impossible = 0;
 	int		nonDisplayable = 0;
+	double	temp;
 
-	errno = 0;
-	f = static_cast<float>(std::strtod(str.c_str(), NULL));
-	if (errno == ERANGE)
+	temp = std::strtod(str.c_str(), NULL); // the thing is that temp could be +inff and it will be more than 
+	if ((temp > std::numeric_limits<float>::max()
+	|| temp < -std::numeric_limits<float>::max())
+	&& (str != "-inff" && str != "+inff" && str != "nanf"))
 	{
 		print(0, 0, 0.0f, 0.0, 15, 0);
 		return ;
 	}
+	f = static_cast<float>(temp);
 	if (f < CHAR_MIN || f > CHAR_MAX || str == "-inff" || str == "+inff" || str == "nanf")
 	{
 		impossible = 1;
