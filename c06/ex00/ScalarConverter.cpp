@@ -32,6 +32,7 @@ static bool	isFloatLiterals(const std::string& str)
 {
 	size_t	i = 0;
 	bool	pointFlag = false, fFlag = false, digitFlag = false;
+
 	if (str.empty())
 		return (false);
 	if (str == "-inff" || str == "+inff" || str == "nanf")
@@ -199,7 +200,6 @@ static void		strToFloat(const std::string& str)
 		print(0, 0, 0.0f, 0.0, 15, 0);
 		return ;
 	}
-	f = static_cast<float>(temp);
 	if (static_cast<double>(f) <= static_cast<double>(CHAR_MIN) - 1.0
 	|| static_cast<double>(f) >= static_cast<double>(CHAR_MAX) + 1.0
 	|| str == "-inff" || str == "+inff" || str == "nanf")
