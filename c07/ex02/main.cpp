@@ -9,6 +9,7 @@ int main(int, char**)
 {
     Array<int> numbers(MAX_VAL);
     int* mirror = new int[MAX_VAL];
+
     srand(time(NULL));
     for (int i = 0; i < MAX_VAL; i++)
     {
@@ -20,6 +21,26 @@ int main(int, char**)
     {
         Array<int> tmp = numbers;
         Array<int> test(tmp);
+    }
+
+	//ASSIGNMENT OPERATOR
+    {
+        Array<int> a(5);
+        for (unsigned int i = 0; i < a.size(); i++)
+            a[i] = i;
+        Array<int> b(2);
+        b = a;
+        if (b.size() != a.size())
+        {
+            std::cerr << "assignment didn't copy size!!" << std::endl;
+            return 1;
+        }
+        b[0] = 42;
+        if (a[0] != 0)
+        {
+            std::cerr << "assignment didn't deep copy!!" << std::endl;
+            return 1;
+        }
     }
 
     for (int i = 0; i < MAX_VAL; i++)
