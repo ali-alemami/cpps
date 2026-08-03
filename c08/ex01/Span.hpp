@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <vector>
+#include <iterator>
 
 class Span
 {
@@ -35,6 +36,7 @@ class Span
 		void	addNumbers(InputIterator begin,
 							InputIterator end)
 		{
+			if (N - _v.size() < static_cast<unsigned int>(std::distance(begin, end)))
 				throw (Span::exceededBounds());
 			while (begin != end)
 			{
