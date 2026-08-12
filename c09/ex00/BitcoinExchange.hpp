@@ -24,12 +24,12 @@ private:
 
 	std::map<tm, double, TmCompare>	m;
 	
-	
-
 	static int		convertStringToInt(const std::string& str);
 	static double	convertStringToDouble(const std::string& str);
 	bool			findClosestMatchingDate(tm date, double& exchangeRate);
 	static void		isValidDate(tm date);
+	static void		parseLine(const std::string& line, tm& date, double& value);
+	void			evaluateAndPrint(const tm& date, double value);
 
 public:
 
@@ -43,6 +43,5 @@ public:
 };
 
 std::ostream&	operator<<(std::ostream& o, const tm& date);
-
 
 #endif

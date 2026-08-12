@@ -120,14 +120,45 @@ void	BitcoinExchange::isValidDate(tm date)
 	throw (std::exception());
 }
 
+void	BitcoinExchange::parseLine(const std::string& line, tm& date, double& value)
+{
+	if (line.size() < 14)
+		throw (std::exception());
+	if (line[4] != '-' || line[7] != '-' || line.substr(10, 3) != " | ")
+		throw (std::exception());
+	date.tm_year = convertStringToInt(line.substr(0, 4)) - 1900;
+	date.tm_mon = convertStringToInt(line.substr(5, 2)) - 1;
+	date.tm_mday = convertStringToInt(line.substr(8, 2));
+	isValidDate(date);
+	value = convertStringToDouble(line.substr(13));
+}
+
+void	BitcoinExchange::evaluateAndPrint(const tm& date, double value)
+{
+	double	exchangeRate = 0;
+
+	if (value > 1000)
+	{
+		std::cerr << "Error: too large a number.\n";
+		return ;
+	}
+	if (value < 0)
+	{
+		std::cerr << "Error: not a positive number.\n";
+		return ;
+	}
+	if (findClosestMatchingDate(date, exchangeRate))
+		std::cout << date << " => " << value << " = " << exchangeRate * value + 0.0 << "\n";
+	else
+		std::cerr << "Error: date was not found => " << date << "\n";
+}
+
 void	BitcoinExchange::processInputFile(const std::string& fileName)
 {
 	std::ifstream	infile;
 	std::string		line;
 	tm				date = tm();
-	double			exchangeRate = 0;
 	double			value;
-	double			result;
 
 	std::cout << std::setprecision(15);
 
@@ -141,7 +172,7 @@ void	BitcoinExchange::processInputFile(const std::string& fileName)
 	if (line != "date | value")
 	{
 		std::cerr << "Error: wrong format => " << line << "\n";
-		exit(1);
+		return ;
 	}
 	while (std::getline(infile, line))
 	{
@@ -149,38 +180,14 @@ void	BitcoinExchange::processInputFile(const std::string& fileName)
 			continue ;
 		try
 		{
-			if (line.size() < 14)
-				throw (std::exception());
-			if (line[4] != '-' || line[7] != '-' || line.substr(10, 3) != " | ")
-				throw (std::exception());
-			date.tm_year = convertStringToInt(line.substr(0, 4)) - 1900;
-			date.tm_mon = convertStringToInt(line.substr(5, 2)) - 1;
-			date.tm_mday = convertStringToInt(line.substr(8, 2));
-			isValidDate(date);
-			value = convertStringToDouble(line.substr(13));
+			parseLine(line, date, value);
 		}
 		catch(const std::exception& e)
 		{
 			std::cerr << "Error: bad input => " << line << "\n";
 			continue ;
 		}
-		if (value > 1000)
-		{
-			std::cerr << "Error: too large a number.\n";
-			continue ;
-		}
-		if (value < 0)
-		{
-			std::cerr << "Error: not a positive number.\n";
-			continue ;
-		}
-		if (findClosestMatchingDate(date, exchangeRate))
-		{
-			result = exchangeRate * value;
-			std::cout << date << " => " << value << " = " << result + 0.0 << "\n";
-		}
-		else
-			std::cerr << "Error: date was not found => " << date << "\n";
+		evaluateAndPrint(date, value);
 	}
 	infile.close();
 }
