@@ -17,7 +17,7 @@ class PhoneBook
 		int		_index;
 
 		void		_askAndSet(Contact& contact, void (Contact::*setter)(const std::string &), const std::string& prompt);
-		bool		_isNumber(const std::string str);
+		bool		_isNumber(const std::string& str);
 		void		_showAllContacts();
 		std::string	_truncate(const std::string& str, int width);
 

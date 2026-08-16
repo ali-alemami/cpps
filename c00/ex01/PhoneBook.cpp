@@ -13,7 +13,7 @@ void	PhoneBook::_askAndSet(Contact& contact, void (Contact::*setter)(const std::
 	(contact.*setter)(input);
 }
 
-bool	PhoneBook::_isNumber(const std::string str)
+bool	PhoneBook::_isNumber(const std::string& str)
 {
 	if (str.empty())
 		return (false);
@@ -50,12 +50,22 @@ PhoneBook& PhoneBook::operator=(const PhoneBook& other)
 
 PhoneBook::~PhoneBook() {}
 
+
 void	PhoneBook::add()
 {
 	_askAndSet(_contacts[_index], &Contact::setFirstName, "First name: ");
 	_askAndSet(_contacts[_index], &Contact::setLastName, "Last name: ");
 	_askAndSet(_contacts[_index], &Contact::setNickName, "Nick name: ");
-	_askAndSet(_contacts[_index], &Contact::setPhoneNumber, "Phone number: ");
+	do 
+	{
+		_askAndSet(_contacts[_index], &Contact::setPhoneNumber, "Phone number: ");
+		if (!_isNumber(_contacts[_index].getPhoneNumber())
+				|| _contacts[_index].getPhoneNumber().substr(0, 2) != "07"
+				|| _contacts[_index].getPhoneNumber().size() != 10)
+			std::cout << "Phone number must start with 07 and be 10 digits" << std::endl;
+	} while (!_isNumber(_contacts[_index].getPhoneNumber())
+				|| _contacts[_index].getPhoneNumber().substr(0, 2) != "07"
+				|| _contacts[_index].getPhoneNumber().size() != 10);
 	_askAndSet(_contacts[_index], &Contact::setDarkestSecret, "Darkest secret: ");
 	_index++;
 	_index %= 8;
