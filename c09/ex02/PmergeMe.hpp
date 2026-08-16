@@ -13,7 +13,6 @@ private:
 	std::deque<int>		q;
 
 	int				convertStringToInt(const char* str);
-	size_t			pow(size_t base, unsigned int exp);
 	size_t			findPairSize();
 	unsigned long	jacobsthal(unsigned int n);
 

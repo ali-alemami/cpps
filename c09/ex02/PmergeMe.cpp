@@ -44,18 +44,6 @@ void	PmergeMe::pushElementsIntoContainer(char** argv)
 	}
 }
 
-size_t PmergeMe::pow(size_t base, unsigned int exp)
-{
-    size_t result = 1;
-    while (exp > 0)
-	{
-        if (exp % 2 == 1)
-            result *= base;
-        base *= base;
-        exp /= 2;
-    }
-    return result;
-}
 
 // 11, 2, 17, 0, 16, 8, 6, 15, 10, 3, 21, 1, 18, 9, 14, 19, 12, 5, 4, 20, 13, 7
 
@@ -69,7 +57,7 @@ void	PmergeMe::pairUpElements(int firstIndex, int secondIndex, int stride, int l
 	int originalSecondIndex = secondIndex;
 	int	offset;
 
-	if (v.size() < pow(2, level))
+	if (v.size() < static_cast<size_t>(1 << level))
 		return ;
 	limit = v.size();
 	if (v.size() % stride != 0)
@@ -97,11 +85,11 @@ size_t	PmergeMe::findPairSize()
 {
 	size_t	pairSize = 1;
 
-	while (pow(2, pairSize) * 3 <= v.size())
+	while (static_cast<size_t>(1 << pairSize) * 3 <= v.size())
 	{
 		pairSize++;
 	}
-	return (pow(2, --pairSize));
+	return (1 << (--pairSize));
 }
 
 unsigned long	PmergeMe::jacobsthal(unsigned int n)
@@ -144,10 +132,10 @@ void	PmergeMe::mergeInsert(char **argv)
 	pairUpElements(0, 1, 2, 1);
 
 	for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
-        std::cout << *it << ' ';
-    }
+		std::cout << *it << ' ';
+	}
 
 	findPairSize();
-	reverseRecursive();
+	reverseRecursive(0);
 	std::cout << "\n";
 }
