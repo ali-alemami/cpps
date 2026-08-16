@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/ex02/PmergeMe",
+      "args": ["11", "2", "17", "0", "16", "8", "6", "15", "10", "3", "21", "1", "18", "9", "14", "19", "12", "5", "4", "20", "13", "7"],
+      "cwd": "${workspaceFolder}/ex02",
+      "MIMode": "gdb",
+      "preLaunchTask": "make",
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "setupCommands": [
+        { "text": "-enable-pretty-printing" }
+      ]
+    }
+  ]
+}
