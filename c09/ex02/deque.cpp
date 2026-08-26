@@ -130,8 +130,7 @@ void    PmergeMe::mergeInsertDeque()
 
 	size_t startPairSize = 1;
 	while (startPairSize * 2 <= q.size() / 2)
-	{
 		startPairSize *= 2;
-	}
+
 	unwindAndInsertDeque(startPairSize);
 }

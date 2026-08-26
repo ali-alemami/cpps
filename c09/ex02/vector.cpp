@@ -130,8 +130,7 @@ void    PmergeMe::mergeInsertVector()
 
 	size_t startPairSize = 1;
 	while (startPairSize * 2 <= v.size() / 2)
-	{
 		startPairSize *= 2;
-	}
+
 	unwindAndInsert(startPairSize);
 }
