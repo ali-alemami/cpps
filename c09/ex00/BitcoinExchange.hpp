@@ -12,14 +12,7 @@ private:
 
 	struct TmCompare
 	{
-		bool	operator()(const tm& a, const tm& b) const
-		{
-			if (a.tm_year != b.tm_year)
-				return (a.tm_year < b.tm_year);
-			if (a.tm_mon != b.tm_mon)
-				return (a.tm_mon < b.tm_mon);
-			return (a.tm_mday < b.tm_mday);
-		}
+		bool	operator()(const tm& a, const tm& b) const;
 	};
 
 	std::map<tm, double, TmCompare>	m;

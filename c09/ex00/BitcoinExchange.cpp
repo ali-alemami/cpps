@@ -26,6 +26,15 @@ BitcoinExchange&	BitcoinExchange::operator=(const BitcoinExchange& other)
 
 BitcoinExchange::~BitcoinExchange() {}
 
+bool	BitcoinExchange::TmCompare::operator()(const tm& a, const tm& b) const
+{
+	if (a.tm_year != b.tm_year)
+		return (a.tm_year < b.tm_year);
+	if (a.tm_mon != b.tm_mon)
+		return (a.tm_mon < b.tm_mon);
+	return (a.tm_mday < b.tm_mday);
+}
+
 int	BitcoinExchange::convertStringToInt(const std::string& str)
 {
 	int		val;
@@ -34,7 +43,7 @@ int	BitcoinExchange::convertStringToInt(const std::string& str)
 
 	errno = 0;
 	tmp = std::strtol(str.c_str(), &endPtr, 10);
-	if (tmp > INT_MAX || tmp < INT_MIN || errno == ERANGE || *endPtr != '\0')
+	if (tmp > INT_MAX || tmp < INT_MIN || errno == ERANGE || *endPtr != '\0' || endPtr == str.c_str())
 	{
 		throw (std::exception());
 	}
@@ -49,7 +58,7 @@ double	BitcoinExchange::convertStringToDouble(const std::string& str)
 	
 	errno = 0;
 	val = std::strtod(str.c_str(), &endPtr);
-	if (errno == ERANGE || *endPtr != '\0')
+	if (errno == ERANGE || *endPtr != '\0' || endPtr == str.c_str())
 	{
 		throw (std::exception());
 	}
@@ -60,7 +69,7 @@ void	BitcoinExchange::loadDataBase(const std::string& fileName)
 {
 	std::ifstream					infile;
 	std::string						line;
-	tm								date;
+	tm								date = tm();
 	double							exchangeRate;
 
 	infile.open(fileName.c_str());
@@ -72,6 +81,8 @@ void	BitcoinExchange::loadDataBase(const std::string& fileName)
 	std::getline(infile, line);
 	while (std::getline(infile, line))
 	{
+		if (line.empty() || line.size() < 12)
+			continue;
 		date.tm_year = convertStringToInt(line.substr(0, 4)) - 1900;
 		date.tm_mon = convertStringToInt(line.substr(5, 2)) - 1;
 		date.tm_mday = convertStringToInt(line.substr(8, 2));
@@ -95,6 +106,8 @@ bool	BitcoinExchange::findClosestMatchingDate(tm date, double& exchangeRate)
 	std::map<tm, double, TmCompare>::iterator	begin = m.begin();
 	TmCompare									cmp;
 
+	if (m.empty())
+		return (false);
 	if (cmp(date, begin->first))
 			return (false);
 	while (true)

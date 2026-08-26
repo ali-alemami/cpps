@@ -2,7 +2,7 @@ NAME = PmergeMe
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-SRC =  PmergeMe.cpp main.cpp
+SRC =  PmergeMe.cpp vector.cpp deque.cpp main.cpp
 HEADER =  PmergeMe.hpp
 OBJ = $(SRC:.cpp=.o)
 	
