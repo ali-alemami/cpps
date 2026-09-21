@@ -1,40 +1,74 @@
-# 42 C++ Modules 🚀
+*This project has been created as part of the 42 curriculum by aalemami.*
 
-This repository contains my solutions to the **C++ pool** modules (C00 to C09) from the [42 School](https://42.fr/) curriculum.
+# 42 C++ Modules (CPP 00–09)
 
-These modules are designed to transition students from procedural C programming to Object-Oriented Programming (OOP) in C++98, focusing strictly on memory safety, the Orthodox Canonical Class Form, and the Standard Template Library (STL).
+---
 
-## 📚 Curriculum Breakdown
+## Description
 
-Each module introduces progressively more complex OOP paradigms and C++ features:
+This repository contains my solutions to the **C++ Modules** (CPP00 to CPP09) from the [42 School](https://42.fr/) curriculum.
 
-### Core OOP (C00 - C04)
-* **CPP00:** Namespaces, classes, member functions, stdio streams, initialization lists, static, const, and basic OOP.
-* **CPP01:** Memory allocation (`new`/`delete`), references, pointers to members, file streams.
-* **CPP02:** Ad-hoc polymorphism, operator overloading, and the Orthodox Canonical Class Form.
-* **CPP03:** Inheritance (Single and Multiple).
-* **CPP04:** Subtype polymorphism, abstract classes, interfaces.
+The modules guide the transition from procedural C programming to Object-Oriented Programming (OOP) in C++98, emphasizing memory management, the Orthodox Canonical Class Form, subtype polymorphism, template metaprogramming, and the Standard Template Library (STL).
 
-### Advanced Concepts (C05 - C09)
-* **CPP05:** Exception handling, try/catch blocks.
-* **CPP06:** C++ Casts (`static_cast`, `dynamic_cast`, `reinterpret_cast`, `const_cast`).
-* **CPP07:** C++ Templates (Function templates and Class templates).
-* **CPP08:** Templated containers, iterators, and algorithms (STL).
-* **CPP09:** Practical applications of STL containers (Maps, Stacks, Vectors, Deques) for complex algorithmic problems (e.g., Reverse Polish Notation, Ford-Johnson merge-insert sort).
+---
 
-## 🛠 Rules & Technologies
-* **Language:** C++98
-* **Compiler:** `c++` with flags `-Wall -Wextra -Werror -std=c++98`
-* **Style:** The Orthodox Canonical Class Form is strictly enforced from Module 02 onwards, requiring:
-  1. Default Constructor
-  2. Copy Constructor
-  3. Copy Assignment Operator
-  4. Destructor
+## Curriculum Breakdown
 
-## 🚀 Execution
-Each subfolder contains its own `Makefile`. To compile and run a specific exercise:
+### Core OOP (CPP 00 – CPP 04)
+* **CPP00**: Namespaces, classes, member functions, stdio streams, initialization lists, `static`, `const`.
+* **CPP01**: Dynamic allocation (`new`/`delete`), references, pointers to members, file streams.
+* **CPP02**: Ad-hoc polymorphism, operator overloading, fixed-point arithmetic, and the Orthodox Canonical Class Form.
+* **CPP03**: Single and multiple inheritance, constructor chaining, diamond problem resolution.
+* **CPP04**: Subtype polymorphism, abstract base classes, pure virtual functions, and interface definitions.
+
+### Advanced Concepts (CPP 05 – CPP 09)
+* **CPP05**: Exception handling mechanisms and nested exception classes.
+* **CPP06**: C++ type casting (`static_cast`, `dynamic_cast`, `reinterpret_cast`, `const_cast`) and type serialization.
+* **CPP07**: Function templates, class templates, and template specialization.
+* **CPP08**: Templated STL containers, iterators, and generic algorithm functions.
+* **CPP09**: Practical algorithmic applications of STL containers (Reverse Polish Notation, Ford-Johnson merge-insert sort with Jacobsthal sequences, Bitcoin exchange lookup).
+
+---
+
+## Rules and Standards
+
+* **Standard**: C++98
+* **Compilation Flags**: `c++ -Wall -Wextra -Werror -std=c++98`
+* **Orthodox Canonical Class Form**: Strictly implemented for all classes from Module 02 onward:
+  1. Default constructor
+  2. Copy constructor
+  3. Copy assignment operator
+  4. Destructor (virtual in base classes)
+
+---
+
+## Compilation and Execution
+
+Each exercise directory contains an independent `Makefile`. To build and execute any module:
+
 ```bash
 cd c00/ex01
 make
 ./phonebook
 ```
+
+Clean build artifacts:
+```bash
+make clean   # Remove object files
+make fclean  # Remove object files and binary
+make re      # Full rebuild
+```
+
+---
+
+## Resources
+
+- [cppreference.com](https://en.cppreference.com/) — C++ language and standard library reference.
+- [C++ Primer (5th Edition)](https://www.oreilly.com/library/view/c-primer-fifth/9780133053043/) — Foundational reference for object-oriented C++.
+
+### AI Usage
+
+AI tools were used as a development reference for:
+- Clarifying subtleties of C++98 template syntax and container iterator traits.
+- Reviewing Jacobsthal grouping intervals for the Ford-Johnson sorting algorithm in Module 09.
+- Verifying Orthodox Canonical Form completeness across class hierarchies.
