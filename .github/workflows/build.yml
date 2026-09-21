@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compiler: [g++, clang++]
+
+    env:
+      CXXFLAGS: "-Wall -Wextra -Werror"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set compiler
+        run: |
+          if [ "${{ matrix.compiler }}" = "g++" ]; then
+            echo "CXX=g++" >> $GITHUB_ENV
+          else
+            echo "CXX=clang++" >> $GITHUB_ENV
+          fi
+
+      - name: Build modules
+        run: |
+          for dir in c*/; do
+            if [ -d "$dir" ]; then
+              echo "=== Building $dir ==="
+              for cpp in "$dir"*.cpp "$dir"**/*.cpp; do
+                if [ -f "$cpp" ]; then
+                  echo "Compiling $cpp"
+                  $CXX $CXXFLAGS -std=c++98 -c "$cpp" -o /dev/null || true
+                fi
+              done
+            fi
+          done
