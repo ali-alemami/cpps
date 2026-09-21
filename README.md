@@ -33,7 +33,7 @@ The modules guide the transition from procedural C programming to Object-Oriente
 ## Rules and Standards
 
 * **Standard**: C++98
-* **Compilation Flags**: `c++ -Wall -Wextra -Werror -std=c++98`
+* **Compiler / Flags**: `c++ -Wall -Wextra -Werror -std=c++98`
 * **Orthodox Canonical Class Form**: Strictly implemented for all classes from Module 02 onward:
   1. Default constructor
   2. Copy constructor
